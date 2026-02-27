@@ -1,0 +1,741 @@
+:root {
+    --primary: #0d6efd;
+    --secondary: #6c757d;
+    --success: #198754;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #0dcaf0;
+    --dark: #212529;
+    --light: #f8f9fa;
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f4f7fc;
+    overflow-x: hidden;
+}
+
+/* Навигация */
+.navbar {
+    box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    padding: 15px 0;
+    background: white !important;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    color: var(--primary) !important;
+    font-size: 1.6rem;
+    letter-spacing: -0.5px;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: var(--dark) !important;
+    margin: 0 10px;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary) !important;
+}
+
+.nav-link.active {
+    color: var(--primary) !important;
+    border-bottom: 3px solid var(--primary);
+}
+
+/* Герой секция */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0;
+    margin-bottom: 50px;
+    border-radius: 0 0 50px 50px;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.95;
+    margin-bottom: 30px;
+}
+
+/* Карточки */
+.card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background: white;
+    border-bottom: 2px solid #f0f0f0;
+    padding: 20px 25px;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+/* Услуги */
+.service-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--primary), #0099ff);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Каталог запчастей */
+.part-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    padding: 20px;
+    transition: 0.3s;
+    background: white;
+    height: 100%;
+}
+
+.part-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 5px 20px rgba(13,110,253,0.1);
+}
+
+.part-image {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.part-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.part-price {
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.4rem;
+    margin: 15px 0;
+}
+
+.btn-cart {
+    width: 100%;
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+/* Корзина */
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-right: 15px;
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.cart-item-price {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.cart-total {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--dark);
+    padding: 20px 0;
+    border-top: 2px solid #eee;
+}
+
+/* Форма записи */
+.booking-form {
+    background: white;
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+.form-control, .form-select {
+    border-radius: 12px;
+    padding: 12px 20px;
+    border: 2px solid #e0e0e0;
+    transition: 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.1);
+}
+
+.btn {
+    border-radius: 12px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), #0099ff);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(13,110,253,0.3);
+}
+
+/* Уведомления */
+.alert {
+    border-radius: 15px;
+    border: none;
+    padding: 20px;
+}
+
+/* Футер */
+.footer {
+    background: var(--dark);
+    color: white;
+    padding: 60px 0 30px;
+    margin-top: 80px;
+    border-radius: 50px 50px 0 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .booking-form {
+        padding: 25px;
+    }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Статусы записи */
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-confirmed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-completed {
+    background: #cce5ff;
+    color: #004085;
+}
+
+/* Модальное окно заказов */
+.order-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.order-id {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.order-date {
+    color: var(--secondary);
+    font-size: 0.9rem;
+}
+
+.order-items {
+    margin-bottom: 15px;
+}
+
+.order-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed #e0e0e0;
+}
+
+.order-item-name {
+    font-weight: 500;
+}
+
+.order-item-quantity {
+    color: var(--secondary);
+    font-size: 0.9rem;
+}
+
+.order-item-price {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.order-status {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.order-status-new {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.order-status-processing {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.order-status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Загрузка */
+.loading-spinner {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ========== ЧАТ ПОДДЕРЖКИ ========== */
+
+.chat-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #0099ff);
+    color: white;
+    border: none;
+    box-shadow: 0 5px 20px rgba(13, 110, 253, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.chat-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4);
+}
+
+.chat-button i {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 9998;
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-window.active {
+    display: flex;
+}
+
+.chat-header {
+    background: linear-gradient(135deg, var(--primary), #0099ff);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f8f9fa;
+}
+
+.message {
+    margin-bottom: 15px;
+    max-width: 80%;
+    animation: messageIn 0.3s ease-out;
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-user {
+    margin-left: auto;
+}
+
+.message-user .message-content {
+    background: var(--primary);
+    color: white;
+    border-radius: 15px 15px 0 15px;
+    padding: 10px 15px;
+}
+
+.message-support .message-content {
+    background: white;
+    color: var(--dark);
+    border-radius: 15px 15px 15px 0;
+    padding: 10px 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.message-system {
+    text-align: center;
+    margin: 10px auto;
+    max-width: 100%;
+}
+
+.message-system small {
+    background: #e9ecef;
+    color: var(--secondary);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 11px;
+}
+
+.message-time {
+    font-size: 10px;
+    color: var(--secondary);
+    margin-top: 5px;
+    text-align: right;
+}
+
+.message-user .message-time {
+    color: rgba(255,255,255,0.7);
+}
+
+.chat-input {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+}
+
+.chat-input form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 25px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.chat-input input:focus {
+    border-color: var(--primary);
+}
+
+.chat-input button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-input button:hover {
+    transform: scale(1.1);
+    background: #0b5ed7;
+}
+
+.quick-questions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.quick-question {
+    background: #f8f9fa;
+    color: var(--primary);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid #e9ecef;
+}
+
+.quick-question:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Адаптивность */
+@media (max-width: 576px) {
+    .chat-window {
+        width: calc(100% - 40px);
+        height: 400px;
+        bottom: 90px;
+        right: 20px;
+    }
+    
+    .chat-button {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Уведомление о новом сообщении */
+.chat-notification {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    display: none;
+    align-items: center;
+    gap: 10px;
+    z-index: 9997;
+    border-left: 4px solid var(--primary);
+    animation: slideIn 0.3s ease-out;
+}
+
+.chat-notification.show {
+    display: flex;
+}
+
+.chat-notification-avatar {
+    width: 30px;
+    height: 30px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+}
+
+.chat-notification-content {
+    flex: 1;
+}
+
+.chat-notification-content p {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.chat-notification-content small {
+    color: var(--secondary);
+    font-size: 11px;
+}
+
+.chat-notification-close {
+    color: var(--secondary);
+    cursor: pointer;
+    padding: 5px;
+}
+
+.chat-notification-close:hover {
+    color: var(--danger);
+}
+
+.unread-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--danger);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+}

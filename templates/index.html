@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ремонтная мастерская - Автосервис</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js для графиков -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg sticky-top bg-white">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-tools me-2"></i>
+            JackieService
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#home">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Услуги</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#booking">Запись</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#catalog">Каталог запчастей</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#appointments">Мои записи</a>
+                </li>
+            </ul>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-counter">
+                        0
+                    </span>
+                </button>
+                <button class="btn btn-outline-success" type="button" onclick="showOrdersModal()">
+                    <i class="fas fa-box"></i>
+                </button>
+                <button class="btn btn-outline-info" type="button" onclick="showProfile()">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Модальное окно авторизации -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user me-2 text-primary"></i>
+                    Вход / Регистрация
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label">Ваше имя</label>
+                        <input type="text" class="form-control" id="loginName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Телефон</label>
+                        <input type="tel" class="form-control" id="loginPhone" placeholder="+7 (999) 123-45-67" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email (необязательно)</label>
+                        <input type="email" class="form-control" id="loginEmail">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Войти
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Главная страница -->
+<section id="home" class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="hero-title fade-in">
+                    <i class="fas fa-car me-3"></i>
+                    Профессиональный автосервис
+                </h1>
+                <p class="hero-subtitle fade-in">
+                    Качественное обслуживание, оригинальные запчасти, гарантия на все работы.
+                    Запишитесь на ТО или приобретите необходимые запчасти прямо сейчас!
+                </p>
+                <div class="fade-in">
+                    <a href="#booking" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-calendar-check me-2"></i>
+                        Записаться
+                    </a>
+                    <a href="#catalog" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-search me-2"></i>
+                        Каталог запчастей
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Статистика -->
+    <div class="row mb-5 text-center">
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card p-4">
+                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                <h3 class="fw-bold" id="client-count">2,500+</h3>
+                <p class="text-muted">Довольных клиентов</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card p-4">
+                <i class="fas fa-tools fa-3x text-success mb-3"></i>
+                <h3 class="fw-bold" id="works-count">3,200+</h3>
+                <p class="text-muted">Выполненных работ</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card p-4">
+                <i class="fas fa-box fa-3x text-warning mb-3"></i>
+                <h3 class="fw-bold" id="parts-count">5,000+</h3>
+                <p class="text-muted">Запчастей в наличии</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card p-4">
+                <i class="fas fa-clock fa-3x text-info mb-3"></i>
+                <h3 class="fw-bold">24/7</h3>
+                <p class="text-muted">Поддержка</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Услуги -->
+    <section id="services" class="my-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-3">Наши услуги</h2>
+            <p class="text-muted">Полный спектр услуг по ремонту и обслуживанию автомобилей</p>
+        </div>
+        
+        <div class="row g-4" id="servicesGrid">
+            <!-- Услуги будут загружены через JavaScript -->
+        </div>
+    </section>
+
+    <!-- Запись на ТО -->
+    <section id="booking" class="my-5">
+        <div class="booking-form">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h3 class="fw-bold mb-4">
+                        <i class="fas fa-calendar-alt text-primary me-2"></i>
+                        Запись на техническое обслуживание
+                    </h3>
+                    
+                    <form id="bookingForm">
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Марка автомобиля</label>
+                            <input type="text" class="form-control" id="carBrand" placeholder="Например: Toyota" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Модель</label>
+                            <input type="text" class="form-control" id="carModel" placeholder="Например: Camry" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Год выпуска</label>
+                            <input type="number" class="form-control" id="carYear" placeholder="2020" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Выберите услугу</label>
+                            <select class="form-select" id="serviceType" required>
+                                <option value="">Выберите услугу...</option>
+                                <option value="oil">Замена масла и фильтров</option>
+                                <option value="diagnostic">Диагностика двигателя</option>
+                                <option value="brake">Ремонт тормозной системы</option>
+                                <option value="suspension">Ремонт подвески</option>
+                                <option value="ac">Заправка кондиционера</option>
+                                <option value="full">Комплексное ТО</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Дата и время</label>
+                            <div class="row">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <input type="date" class="form-control" id="bookingDate" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-select" id="bookingTime" required>
+                                        <option value="">Время</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="18:00">18:00</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Дополнительные пожелания</label>
+                            <textarea class="form-control" id="additionalInfo" rows="3" placeholder="Опишите проблему или особые пожелания..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Записаться на обслуживание
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="p-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
+                                <i class="fas fa-clock fs-2 text-primary"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">Время работы</h5>
+                                <p class="text-muted mb-0">Пн-Пт: 9:00 - 20:00<br>Сб-Вс: 10:00 - 18:00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
+                                <i class="fas fa-map-marker-alt fs-2 text-success"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">Адрес</h5>
+                                <p class="text-muted mb-0">г. Челябинск, ул. Кожзоводская, д. 1</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-info bg-opacity-10 p-3 rounded-3 me-3">
+                                <i class="fas fa-phone fs-2 text-info"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">Телефон</h5>
+                                <p class="text-muted mb-0">+7 (999) 123-45-67</p>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-primary mt-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Перед посещением мастерской с вами свяжется администратор для подтверждения записи
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Каталог запчастей -->
+    <section id="catalog" class="my-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-bold mb-2">Каталог запчастей</h2>
+                <p class="text-muted">Оригинальные запчасти и качественные аналоги</p>
+            </div>
+            
+            <div class="d-flex">
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" id="searchParts" placeholder="Поиск запчастей...">
+                    <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Фильтры -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <select class="form-select" id="categoryFilter">
+                    <option value="all">Все категории</option>
+                    <option value="engine">Двигатель</option>
+                    <option value="brake">Тормозная система</option>
+                    <option value="suspension">Подвеска</option>
+                    <option value="oil">Масла и фильтры</option>
+                    <option value="electrics">Электрика</option>
+                    <option value="bodywork">Кузовные детали</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <select class="form-select" id="brandFilter">
+                    <option value="all">Все марки</option>
+                    <option value="toyota">Toyota</option>
+                    <option value="nissan">Nissan</option>
+                    <option value="hyundai">Hyundai</option>
+                    <option value="kia">Kia</option>
+                    <option value="renault">Renault</option>
+                    <option value="bmw">BMW</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <select class="form-select" id="sortFilter">
+                    <option value="default">Сортировка</option>
+                    <option value="price_asc">Цена: по возрастанию</option>
+                    <option value="price_desc">Цена: по убыванию</option>
+                    <option value="name">По названию</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <button class="btn btn-outline-secondary w-100" onclick="resetFilters()">
+                    <i class="fas fa-undo me-2"></i>
+                    Сбросить фильтры
+                </button>
+            </div>
+        </div>
+        
+        <!-- Сетка товаров -->
+        <div class="row" id="partsGrid">
+            <div class="col-12 text-center py-5">
+                <div class="loading-spinner"></div>
+                <p class="mt-3">Загрузка каталога...</p>
+            </div>
+        </div>
+        
+        <!-- Пагинация -->
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center" id="pagination"></ul>
+        </nav>
+    </section>
+
+    <!-- Мои записи -->
+    <section id="appointments" class="my-5">
+        <div class="card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h4 class="fw-bold mb-0">
+                    <i class="fas fa-clipboard-list me-2 text-primary"></i>
+                    Мои записи на обслуживание
+                </h4>
+                <span class="badge bg-primary" id="appointments-count">0 записей</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Дата</th>
+                                <th>Время</th>
+                                <th>Автомобиль</th>
+                                <th>Услуга</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointmentsTableBody"></tbody>
+                    </table>
+                </div>
+                
+                <div id="noAppointmentsMessage" class="text-center py-5">
+                    <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                    <h5 class="text-muted">У вас пока нет записей</h5>
+                    <p class="text-muted">Запишитесь на техническое обслуживание прямо сейчас</p>
+                    <a href="#booking" class="btn btn-primary mt-3">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Записаться
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Корзина (Offcanvas) -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold">
+            <i class="fas fa-shopping-cart me-2"></i>
+            Корзина
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="cartItems"></div>
+        
+        <div id="emptyCartMessage" class="text-center py-5">
+            <i class="fas fa-shopping-cart fa-4x text-muted mb-3"></i>
+            <h5 class="text-muted">Корзина пуста</h5>
+            <p class="text-muted">Добавьте запчасти из каталога</p>
+            <a href="#" onclick="goToCatalogFromCart(); return false;" class="btn btn-primary mt-3">
+                <i class="fas fa-search me-2"></i>
+                Перейти в каталог
+            </a>
+        </div>
+        
+        <div id="cartSummary" style="display: none;">
+            <div class="cart-total d-flex justify-content-between">
+                <span>Итого:</span>
+                <span id="cartTotalPrice" class="text-primary">0 ₽</span>
+            </div>
+            
+            <button class="btn btn-success w-100 mt-3" onclick="checkout()">
+                <i class="fas fa-credit-card me-2"></i>
+                Оформить заказ
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно заказов -->
+<div class="modal fade" id="ordersModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-box me-2 text-primary"></i>
+                    Мои заказы
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="ordersModalBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно личного кабинета -->
+<div class="modal fade" id="profileModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-circle text-primary me-2"></i>
+                    Личный кабинет
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Информация о пользователе -->
+                <div class="text-center mb-4">
+                    <div class="position-relative d-inline-block">
+                        <i class="fas fa-user-circle fa-6x text-primary"></i>
+                        <button class="btn btn-sm btn-light position-absolute bottom-0 end-0 rounded-circle" 
+                                onclick="changeAvatar()" title="Сменить фото">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <h4 class="mt-2" id="profileName"></h4>
+                    <p class="text-muted" id="profilePhone"></p>
+                </div>
+
+                <!-- Навигация по вкладкам -->
+                <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#profileInfo" 
+                                type="button" role="tab">
+                            <i class="fas fa-info-circle me-2"></i>Информация
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="cars-tab" data-bs-toggle="tab" data-bs-target="#profileCars" 
+                                type="button" role="tab">
+                            <i class="fas fa-car me-2"></i>Мои автомобили
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#profileStats" 
+                                type="button" role="tab">
+                            <i class="fas fa-chart-line me-2"></i>Статистика
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Содержимое вкладок -->
+                <div class="tab-content mt-4" id="profileTabContent">
+                    <!-- Вкладка информации -->
+                    <div class="tab-pane fade show active" id="profileInfo" role="tabpanel">
+                        <form id="profileForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Имя</label>
+                                    <input type="text" class="form-control" id="profileEditName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Телефон</label>
+                                    <input type="tel" class="form-control" id="profileEditPhone" readonly>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control" id="profileEditEmail" 
+                                           placeholder="example@mail.com">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Сохранить изменения
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Вкладка автомобилей -->
+                    <div class="tab-pane fade" id="profileCars" role="tabpanel">
+                        <div id="carsList" class="mb-4">
+                            <!-- Автомобили будут загружаться сюда -->
+                        </div>
+                        
+                        <!-- Форма добавления автомобиля -->
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="fas fa-plus-circle text-success me-2"></i>
+                                    Добавить автомобиль
+                                </h6>
+                                <form id="addCarForm">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <input type="text" class="form-control" id="carBrand" 
+                                                   placeholder="Марка *" required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <input type="text" class="form-control" id="carModel" 
+                                                   placeholder="Модель *" required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <input type="number" class="form-control" id="carYear" 
+                                                   placeholder="Год выпуска">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <input type="text" class="form-control" id="carVin" 
+                                                   placeholder="VIN номер">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <input type="text" class="form-control" id="carPlate" 
+                                                   placeholder="Госномер">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-plus me-2"></i>Добавить
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Вкладка статистики -->
+                    <div class="tab-pane fade" id="profileStats" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card bg-primary bg-opacity-10">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-wrench fa-3x text-primary mb-2"></i>
+                                        <h3 id="totalServices">0</h3>
+                                        <p class="text-muted">Всего обслуживаний</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card bg-success bg-opacity-10">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-ruble-sign fa-3x text-success mb-2"></i>
+                                        <h3 id="totalSpent">0 ₽</h3>
+                                        <p class="text-muted">Всего потрачено</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Кнопка чата -->
+<button class="chat-button" onclick="toggleChat()">
+    <i class="fas fa-comment"></i>
+</button>
+
+<!-- Окно чата -->
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+        <div class="d-flex align-items-center">
+            <div class="chat-avatar">
+                <i class="fas fa-headset"></i>
+            </div>
+            <div class="ms-2">
+                <h6 class="mb-0 text-white">Поддержка AutoService+</h6>
+                <small class="text-white-50">Онлайн</small>
+            </div>
+        </div>
+        <button class="btn-close btn-close-white" onclick="toggleChat()"></button>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+        <!-- Системное сообщение -->
+        <div class="message message-system">
+            <small>Чат поддержки работает круглосуточно</small>
+        </div>
+        
+        <!-- Приветственное сообщение -->
+        <div class="message message-support">
+            <div class="message-content">
+                Здравствуйте! Чем я могу вам помочь?
+            </div>
+            <div class="message-time">Только что</div>
+        </div>
+    </div>
+    
+    <div class="chat-input">
+        <form id="chatForm" onsubmit="sendMessage(event)">
+            <input type="text" id="chatInput" placeholder="Введите сообщение..." autocomplete="off">
+            <button type="submit">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+        
+        <!-- Быстрые вопросы -->
+        <div class="quick-questions">
+            <span class="quick-question" onclick="sendQuickQuestion('Как записаться на ТО?')">
+                Как записаться?
+            </span>
+            <span class="quick-question" onclick="sendQuickQuestion('Какие есть акции?')">
+                Акции
+            </span>
+            <span class="quick-question" onclick="sendQuickQuestion('Стоимость услуг')">
+                Цены
+            </span>
+            <span class="quick-question" onclick="sendQuickQuestion('Время работы')">
+                График
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Футер -->
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <h4 class="fw-bold mb-4">JackieService</h4>
+                <p class="text-white-50">Профессиональный автосервис с современным оборудованием и опытными мастерами. Гарантия качества на все виды работ.</p>
+            </div>
+            <div class="col-lg-2">
+                <h5 class="fw-bold mb-4">Навигация</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#home" class="text-white-50 text-decoration-none">Главная</a></li>
+                    <li class="mb-2"><a href="#services" class="text-white-50 text-decoration-none">Услуги</a></li>
+                    <li class="mb-2"><a href="#booking" class="text-white-50 text-decoration-none">Запись</a></li>
+                    <li class="mb-2"><a href="#catalog" class="text-white-50 text-decoration-none">Каталог</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <h5 class="fw-bold mb-4">Контакты</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2 text-white-50">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        г. Челябинск, ул. Кожзоводская, д. 1
+                    </li>
+                    <li class="mb-2 text-white-50">
+                        <i class="fas fa-phone me-2"></i>
+                        +7 (999) 123-45-67
+                    </li>
+                    <li class="mb-2 text-white-50">
+                        <i class="fas fa-envelope me-2"></i>
+                        dimkanikitenkovlad@gmail.com
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <h5 class="fw-bold mb-4">Режим работы</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2 text-white-50">Пн-Пт: 9:00 - 20:00</li>
+                    <li class="mb-2 text-white-50">Сб: 10:00 - 18:00</li>
+                    <li class="mb-2 text-white-50">Вс: 10:00 - 16:00</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="text-white-50 mt-5">
+        <div class="text-center text-white-50 mt-4">
+            <p class="mb-0">&copy; 2024 JackieService - Ремонтная мастерская. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
+    
+    let currentUser = null;
+    let cart = [];
+    let parts = [];
+    let filteredParts = [];
+    let currentPage = 1;
+    const itemsPerPage = 8;
+    let filters = {
+        category: 'all',
+        brand: 'all',
+        search: '',
+        sort: 'default'
+    };
+
+    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadStats();
+        loadParts();
+        loadUser();
+        loadAppointments(); // Загружаем записи при загрузке страницы
+        loadCartFromStorage(); // Загружаем корзину из localStorage
+        setupEventListeners();
+        setMinDate();
+    });
+
+    // Загрузка корзины из localStorage
+    function loadCartFromStorage() {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+            updateCartUI();
+        }
+    }
+
+    // Сохранение корзины в localStorage
+    function saveCartToStorage() {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function setupEventListeners() {
+        // Фильтры
+        document.getElementById('categoryFilter')?.addEventListener('change', (e) => {
+            filters.category = e.target.value;
+            applyFilters();
+        });
+        
+        document.getElementById('brandFilter')?.addEventListener('change', (e) => {
+            filters.brand = e.target.value;
+            applyFilters();
+        });
+        
+        document.getElementById('sortFilter')?.addEventListener('change', (e) => {
+            filters.sort = e.target.value;
+            applyFilters();
+        });
+        
+        document.getElementById('searchParts')?.addEventListener('input', (e) => {
+            filters.search = e.target.value;
+            applyFilters();
+        });
+
+        // Форма авторизации
+        document.getElementById('loginForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            login();
+        });
+
+        // Форма записи
+        document.getElementById('bookingForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            createAppointment();
+        });
+
+        // Обработчик для кнопки "Мои записи" в навигации
+        document.querySelector('a[href="#appointments"]')?.addEventListener('click', function(e) {
+            if (currentUser) {
+                loadAppointments(); // Перезагружаем записи при переходе в раздел
+            }
+        });
+    }
+
+    // ==================== РАБОТА С ПОЛЬЗОВАТЕЛЕМ ====================
+
+    async function login() {
+        const name = document.getElementById('loginName').value;
+        const phone = document.getElementById('loginPhone').value;
+        const email = document.getElementById('loginEmail').value;
+
+        if (!name || !phone) {
+            showNotification('Пожалуйста, заполните имя и телефон', 'warning');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/user', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name, phone, email})
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                currentUser = data.user;
+                showNotification('Добро пожаловать, ' + currentUser.name, 'success');
+                
+                // Закрываем модальное окно
+                const modal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+                if (modal) modal.hide();
+                
+                // Загружаем записи и заказы пользователя
+                await loadAppointments();
+                await loadOrders();
+            } else {
+                showNotification(data.message, 'danger');
+            }
+        } catch (error) {
+            showNotification('Ошибка при входе', 'danger');
+        }
+    }
+
+    async function loadUser() {
+        try {
+            const response = await fetch('/api/user');
+            const data = await response.json();
+            
+            if (data.success) {
+                currentUser = data.user;
+                // Если пользователь авторизован, загружаем его записи
+                await loadAppointments();
+                await loadOrders();
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки пользователя:', error);
+        }
+    }
+
+    function showLoginModal() {
+        if (currentUser) {
+            showNotification(`Вы уже вошли как ${currentUser.name}`, 'info');
+        } else {
+            const modal = new bootstrap.Modal(document.getElementById('loginModal'));
+            modal.show();
+        }
+    }
+
+    // ==================== РАБОТА С КАТАЛОГОМ ====================
+
+    async function loadParts() {
+        try {
+            const response = await fetch('/api/parts');
+            const data = await response.json();
+            
+            if (data.success) {
+                parts = data.parts;
+                filteredParts = [...parts];
+                renderCatalog();
+            }
+        } catch (error) {
+            showNotification('Ошибка загрузки каталога', 'danger');
+        }
+    }
+
+    function applyFilters() {
+        filteredParts = parts.filter(part => {
+            if (filters.category !== 'all' && part.category !== filters.category) return false;
+            if (filters.brand !== 'all' && part.brand !== filters.brand && part.brand !== 'all') return false;
+            if (filters.search && !part.name.toLowerCase().includes(filters.search.toLowerCase())) return false;
+            return true;
+        });
+        
+        applySorting();
+        currentPage = 1;
+        renderCatalog();
+    }
+
+    function applySorting() {
+        switch (filters.sort) {
+            case 'price_asc':
+                filteredParts.sort((a, b) => a.price - b.price);
+                break;
+            case 'price_desc':
+                filteredParts.sort((a, b) => b.price - a.price);
+                break;
+            case 'name':
+                filteredParts.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+        }
+    }
+
+    function renderCatalog() {
+        const grid = document.getElementById('partsGrid');
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const paginatedParts = filteredParts.slice(start, end);
+        
+        if (paginatedParts.length === 0) {
+            grid.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+                    <h5 class="text-muted">Запчасти не найдены</h5>
+                    <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                </div>
+            `;
+        } else {
+            grid.innerHTML = paginatedParts.map(part => `
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="part-card">
+                        <img src="${part.image}" class="part-image" alt="${part.name}">
+                        <div class="part-title">${part.name}</div>
+                        <p class="text-muted small mb-2">${part.description}</p>
+                        <div class="part-price">${part.price.toLocaleString()} ₽</div>
+                        <button class="btn btn-primary btn-cart" onclick="addToCart(${part.id})">
+                            <i class="fas fa-shopping-cart me-2"></i>
+                            В корзину
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(filteredParts.length / itemsPerPage);
+        const pagination = document.getElementById('pagination');
+        
+        if (totalPages <= 1) {
+            pagination.innerHTML = '';
+            return;
+        }
+        
+        let html = '';
+        
+        html += `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Предыдущая</a>
+            </li>
+        `;
+        
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                html += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+                    </li>
+                `;
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+        }
+        
+        html += `
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Следующая</a>
+            </li>
+        `;
+        
+        pagination.innerHTML = html;
+    }
+
+    function changePage(page) {
+        const totalPages = Math.ceil(filteredParts.length / itemsPerPage);
+        if (page >= 1 && page <= totalPages) {
+            currentPage = page;
+            renderCatalog();
+            scrollToCatalog();
+        }
+    }
+
+    function scrollToCatalog() {
+        const catalogSection = document.getElementById('catalog');
+        const navbar = document.querySelector('.navbar');
+        const navbarHeight = navbar ? navbar.offsetHeight : 0;
+        
+        setTimeout(() => {
+            window.scrollTo({
+                top: catalogSection.offsetTop - navbarHeight - 20,
+                behavior: 'smooth'
+            });
+        }, 100);
+    }
+
+    function resetFilters() {
+        filters = {
+            category: 'all',
+            brand: 'all',
+            search: '',
+            sort: 'default'
+        };
+        
+        document.getElementById('categoryFilter').value = 'all';
+        document.getElementById('brandFilter').value = 'all';
+        document.getElementById('sortFilter').value = 'default';
+        document.getElementById('searchParts').value = '';
+        
+        applyFilters();
+        scrollToCatalog();
+    }
+
+    // ==================== РАБОТА С КОРЗИНОЙ ====================
+
+    function addToCart(partId) {
+        const part = parts.find(p => p.id === partId);
+        if (!part) return;
+        
+        const existingItem = cart.find(item => item.id === partId);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                id: part.id,
+                name: part.name,
+                price: part.price,
+                image: part.image,
+                quantity: 1
+            });
+        }
+        
+        saveCartToStorage(); // Сохраняем в localStorage
+        updateCartUI();
+        showNotification('Товар добавлен в корзину', 'success');
+    }
+
+    function removeFromCart(partId) {
+        cart = cart.filter(item => item.id !== partId);
+        saveCartToStorage(); // Сохраняем в localStorage
+        updateCartUI();
+    }
+
+    function updateQuantity(partId, quantity) {
+        const item = cart.find(item => item.id === partId);
+        if (item) {
+            if (quantity <= 0) {
+                removeFromCart(partId);
+            } else {
+                item.quantity = quantity;
+                saveCartToStorage(); // Сохраняем в localStorage
+                updateCartUI();
+            }
+        }
+    }
+
+    function getTotalPrice() {
+        return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    }
+
+    function getTotalItems() {
+        return cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    function updateCartUI() {
+        const counter = document.getElementById('cart-counter');
+        const totalItems = getTotalItems();
+        counter.textContent = totalItems;
+        counter.style.display = totalItems > 0 ? 'inline' : 'none';
+        
+        renderCartItems();
+    }
+
+    function renderCartItems() {
+        const cartItemsContainer = document.getElementById('cartItems');
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        const cartSummary = document.getElementById('cartSummary');
+        
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '';
+            emptyCartMessage.style.display = 'block';
+            cartSummary.style.display = 'none';
+            return;
+        }
+        
+        emptyCartMessage.style.display = 'none';
+        cartSummary.style.display = 'block';
+        
+        let html = '';
+        cart.forEach(item => {
+            html += `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price mb-2">${item.price.toLocaleString()} ₽</div>
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="mx-3 fw-bold">${item.quantity}</span>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger ms-3" onclick="removeFromCart(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        cartItemsContainer.innerHTML = html;
+        document.getElementById('cartTotalPrice').innerHTML = `${getTotalPrice().toLocaleString()} ₽`;
+    }
+
+    async function checkout() {
+        if (cart.length === 0) {
+            showNotification('Корзина пуста', 'warning');
+            return;
+        }
+
+        if (!currentUser) {
+            showNotification('Пожалуйста, войдите в систему', 'warning');
+            showLoginModal();
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/orders', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    items: cart,
+                    total_price: getTotalPrice()
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                cart = [];
+                saveCartToStorage(); // Очищаем корзину в localStorage
+                updateCartUI();
+                showNotification('Заказ успешно оформлен!', 'success');
+                
+                const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('cartOffcanvas'));
+                if (offcanvas) offcanvas.hide();
+                
+                setTimeout(() => {
+                    showOrdersModal();
+                }, 500);
+            } else {
+                showNotification(data.message, 'danger');
+            }
+        } catch (error) {
+            showNotification('Ошибка при оформлении заказа', 'danger');
+        }
+    }
+
+    function goToCatalogFromCart() {
+        const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('cartOffcanvas'));
+        if (offcanvas) offcanvas.hide();
+        
+        scrollToCatalog();
+    }
+
+    // ==================== РАБОТА С ЗАКАЗАМИ ====================
+
+    async function loadOrders() {
+        if (!currentUser) return;
+
+        try {
+            const response = await fetch('/api/orders');
+            const data = await response.json();
+            
+            if (data.success) {
+                // Можно обновить UI с заказами если нужно
+                console.log('Заказы загружены:', data.orders);
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки заказов:', error);
+        }
+    }
+
+    async function showOrdersModal() {
+        if (!currentUser) {
+            showNotification('Пожалуйста, войдите в систему', 'warning');
+            showLoginModal();
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/orders');
+            const data = await response.json();
+            
+            const modalBody = document.getElementById('ordersModalBody');
+            
+            if (data.orders.length === 0) {
+                modalBody.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+                        <h5 class="text-muted">У вас пока нет заказов</h5>
+                        <p class="text-muted">Перейдите в каталог, чтобы сделать первый заказ</p>
+                        <button class="btn btn-primary mt-3" onclick="closeOrdersModal(); goToCatalogFromCart();">
+                            <i class="fas fa-search me-2"></i>
+                            Перейти в каталог
+                        </button>
+                    </div>
+                `;
+            } else {
+                modalBody.innerHTML = data.orders.map(order => `
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-id">Заказ №${order.id}</span>
+                            <span class="order-date">${new Date(order.created_at).toLocaleString()}</span>
+                        </div>
+                        <div class="order-items">
+                            ${order.items.map(item => `
+                                <div class="order-item-row">
+                                    <div>
+                                        <span class="order-item-name">${item.name}</span>
+                                        <span class="order-item-quantity ms-2">x${item.quantity}</span>
+                                    </div>
+                                    <span class="order-item-price">${(item.price * item.quantity).toLocaleString()} ₽</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="order-total">
+                            <span>Итого:</span>
+                            <span class="text-primary">${order.total_price.toLocaleString()} ₽</span>
+                        </div>
+                        <div class="mt-3">
+                            <span class="order-status order-status-${order.status}">
+                                ${order.status === 'new' ? 'Новый' : order.status === 'processing' ? 'В обработке' : 'Выполнен'}
+                            </span>
+                        </div>
+                    </div>
+                `).reverse().join('');
+            }
+            
+            const modal = new bootstrap.Modal(document.getElementById('ordersModal'));
+            modal.show();
+        } catch (error) {
+            showNotification('Ошибка при загрузке заказов', 'danger');
+        }
+    }
+
+    function closeOrdersModal() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('ordersModal'));
+        if (modal) modal.hide();
+    }
+
+    // ==================== РАБОТА С ЗАПИСЯМИ ====================
+
+    async function createAppointment() {
+        if (!currentUser) {
+            showNotification('Пожалуйста, войдите в систему', 'warning');
+            showLoginModal();
+            return;
+        }
+
+        const requiredFields = ['carBrand', 'carModel', 'carYear', 'serviceType', 'bookingDate', 'bookingTime'];
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            const element = document.getElementById(field);
+            if (!element.value) {
+                element.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                element.classList.remove('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            showNotification('Пожалуйста, заполните все обязательные поля', 'warning');
+            return;
+        }
+        
+        const formData = {
+            carBrand: document.getElementById('carBrand').value,
+            carModel: document.getElementById('carModel').value,
+            carYear: document.getElementById('carYear').value,
+            serviceType: document.getElementById('serviceType').value,
+            date: document.getElementById('bookingDate').value,
+            time: document.getElementById('bookingTime').value,
+            additionalInfo: document.getElementById('additionalInfo').value
+        };
+
+        try {
+            const response = await fetch('/api/appointments', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                showNotification('Запись успешно создана!', 'success');
+                document.getElementById('bookingForm').reset();
+                await loadAppointments(); // Перезагружаем записи с сервера
+                
+                setTimeout(() => {
+                    document.getElementById('appointments').scrollIntoView({ behavior: 'smooth' });
+                }, 1000);
+            } else {
+                showNotification(data.message, 'danger');
+            }
+        } catch (error) {
+            showNotification('Ошибка при создании записи', 'danger');
+        }
+    }
+
+    async function loadAppointments() {
+        if (!currentUser) {
+            // Если пользователь не авторизован, показываем пустой список
+            renderAppointments([]);
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/appointments');
+            const data = await response.json();
+            
+            if (data.success) {
+                renderAppointments(data.appointments);
+            } else {
+                renderAppointments([]);
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки записей:', error);
+            renderAppointments([]);
+            showNotification('Ошибка при загрузке записей', 'danger');
+        }
+    }
+
+    function renderAppointments(appointments) {
+        const tbody = document.getElementById('appointmentsTableBody');
+        const noAppointmentsMessage = document.getElementById('noAppointmentsMessage');
+        const appointmentsCount = document.getElementById('appointments-count');
+        
+        if (!appointments || appointments.length === 0) {
+            tbody.innerHTML = '';
+            noAppointmentsMessage.style.display = 'block';
+            appointmentsCount.textContent = '0 записей';
+            return;
+        }
+        
+        noAppointmentsMessage.style.display = 'none';
+        appointmentsCount.textContent = `${appointments.length} ${getWordEnding(appointments.length, 'запись', 'записи', 'записей')}`;
+        
+        tbody.innerHTML = appointments.map(app => {
+            let statusClass = '';
+            let statusText = '';
+            
+            switch (app.status) {
+                case 'pending':
+                    statusClass = 'status-pending';
+                    statusText = 'Ожидает подтверждения';
+                    break;
+                case 'confirmed':
+                    statusClass = 'status-confirmed';
+                    statusText = 'Подтверждена';
+                    break;
+                case 'completed':
+                    statusClass = 'status-completed';
+                    statusText = 'Выполнена';
+                    break;
+                default:
+                    statusClass = 'status-pending';
+                    statusText = 'Ожидает';
+            }
+            
+            return `
+                <tr>
+                    <td>${app.appointment_date}</td>
+                    <td>${app.appointment_time}</td>
+                    <td>${app.car_brand} ${app.car_model} (${app.car_year})</td>
+                    <td>${getServiceName(app.service_type)}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        ${app.status === 'pending' ? 
+                            `<button class="btn btn-sm btn-outline-danger" onclick="cancelAppointment(${app.id})">
+                                <i class="fas fa-times"></i> Отменить
+                            </button>` : ''}
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    async function cancelAppointment(appointmentId) {
+        if (!currentUser) return;
+
+        try {
+            const response = await fetch(`/api/appointments/${appointmentId}`, {
+                method: 'DELETE'
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                showNotification('Запись отменена', 'info');
+                await loadAppointments(); // Перезагружаем записи с сервера
+            } else {
+                showNotification(data.message, 'danger');
+            }
+        } catch (error) {
+            showNotification('Ошибка при отмене записи', 'danger');
+        }
+    }
+
+    function getServiceName(serviceId) {
+        const services = {
+            'oil': 'Замена масла и фильтров',
+            'diagnostic': 'Диагностика двигателя',
+            'brake': 'Ремонт тормозной системы',
+            'suspension': 'Ремонт подвески',
+            'ac': 'Заправка кондиционера',
+            'full': 'Комплексное ТО'
+        };
+        return services[serviceId] || serviceId;
+    }
+
+    // ==================== СТАТИСТИКА ====================
+
+    async function loadStats() {
+        try {
+            const response = await fetch('/api/stats');
+            const data = await response.json();
+            
+            if (data.success) {
+                document.getElementById('client-count').textContent = data.stats.clients;
+                document.getElementById('works-count').textContent = data.stats.works;
+                document.getElementById('parts-count').textContent = data.stats.parts;
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки статистики:', error);
+        }
+    }
+
+    // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+
+    function setMinDate() {
+        const dateInput = document.getElementById('bookingDate');
+        const today = new Date();
+        today.setDate(today.getDate() + 1);
+        const tomorrow = today.toISOString().split('T')[0];
+        dateInput.min = tomorrow;
+    }
+
+    function getWordEnding(number, one, two, five) {
+        let n = Math.abs(number);
+        n %= 100;
+        if (n >= 5 && n <= 20) return five;
+        n %= 10;
+        if (n === 1) return one;
+        if (n >= 2 && n <= 4) return two;
+        return five;
+    }
+
+    function showNotification(message, type = 'info') {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} notification`;
+        alertDiv.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'danger' ? 'fa-exclamation-circle' : 'fa-info-circle'} me-2"></i>
+            ${message}
+        `;
+        
+        document.body.appendChild(alertDiv);
+        
+        setTimeout(() => {
+            alertDiv.remove();
+        }, 3000);
+    }
+// ==================== ЛИЧНЫЙ КАБИНЕТ ====================
+
+// Показать личный кабинет
+function showProfile() {
+    if (!currentUser) {
+        showNotification('Пожалуйста, войдите в систему', 'warning');
+        showLoginModal();
+        return;
+    }
+    
+    // Заполняем данные профиля
+    document.getElementById('profileName').textContent = currentUser.name;
+    document.getElementById('profilePhone').textContent = currentUser.phone;
+    document.getElementById('profileEditName').value = currentUser.name;
+    document.getElementById('profileEditPhone').value = currentUser.phone;
+    document.getElementById('profileEditEmail').value = currentUser.email || '';
+    
+    // Загружаем автомобили
+    loadUserCars();
+    
+    // Загружаем статистику
+    loadUserStats();
+    
+    const modal = new bootstrap.Modal(document.getElementById('profileModal'));
+    modal.show();
+}
+
+// Загрузка автомобилей пользователя
+async function loadUserCars() {
+    try {
+        const response = await fetch('/api/user/cars');
+        const data = await response.json();
+        
+        if (data.success) {
+            renderUserCars(data.cars);
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки автомобилей:', error);
+    }
+}
+
+// Отображение автомобилей
+function renderUserCars(cars) {
+    const carsList = document.getElementById('carsList');
+    
+    if (cars.length === 0) {
+        carsList.innerHTML = `
+            <div class="text-center py-4">
+                <i class="fas fa-car fa-3x text-muted mb-3"></i>
+                <p class="text-muted">У вас пока нет добавленных автомобилей</p>
+            </div>
+        `;
+        return;
+    }
+    
+    carsList.innerHTML = cars.map(car => `
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-1">
+                            <i class="fas fa-car text-primary me-2"></i>
+                            ${car.brand} ${car.model} ${car.year ? '(' + car.year + ')' : ''}
+                        </h6>
+                        ${car.vin ? `<p class="small text-muted mb-1">VIN: ${car.vin}</p>` : ''}
+                        ${car.license_plate ? `<p class="small text-muted mb-0">Госномер: ${car.license_plate}</p>` : ''}
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCar(${car.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Удаление автомобиля
+async function deleteCar(carId) {
+    if (!confirm('Вы уверены, что хотите удалить этот автомобиль?')) return;
+    
+    try {
+        const response = await fetch(`/api/user/cars/${carId}`, {
+            method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Автомобиль удален', 'success');
+            loadUserCars(); // Перезагружаем список
+        }
+    } catch (error) {
+        showNotification('Ошибка при удалении', 'danger');
+    }
+}
+
+// Загрузка статистики пользователя
+async function loadUserStats() {
+    try {
+        // Здесь можно сделать запрос к API для реальной статистики
+        // Пока используем тестовые данные
+        const appointments = await fetch('/api/appointments').then(res => res.json());
+        const orders = await fetch('/api/orders').then(res => res.json());
+        
+        const totalServices = (appointments.appointments?.length || 0) + (orders.orders?.length || 0);
+        const totalSpent = orders.orders?.reduce((sum, order) => sum + order.total_price, 0) || 0;
+        
+        document.getElementById('totalServices').textContent = totalServices;
+        document.getElementById('totalSpent').textContent = totalSpent.toLocaleString() + ' ₽';
+        
+        // Создаем график
+        createActivityChart();
+    } catch (error) {
+        console.error('Ошибка загрузки статистики:', error);
+    }
+}
+
+// Создание графика активности
+function createActivityChart() {
+    const ctx = document.getElementById('activityChart')?.getContext('2d');
+    if (!ctx) return;
+    
+    // Очищаем предыдущий график если есть
+    const existingChart = Chart.getChart(ctx);
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    // Тестовые данные для графика
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'],
+            datasets: [{
+                label: 'Посещений',
+                data: [2, 3, 1, 4, 2, 3],
+                borderColor: '#0d6efd',
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+// Обновление профиля
+document.getElementById('profileForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('profileEditName').value;
+    const email = document.getElementById('profileEditEmail').value;
+    
+    try {
+        const response = await fetch('/api/user/profile', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({name, email})
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentUser = data.user;
+            document.getElementById('profileName').textContent = name;
+            showNotification('Профиль обновлен', 'success');
+        } else {
+            showNotification(data.message, 'danger');
+        }
+    } catch (error) {
+        showNotification('Ошибка при обновлении', 'danger');
+    }
+});
+
+// Добавление автомобиля
+document.getElementById('addCarForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const carData = {
+        brand: document.getElementById('carBrand').value,
+        model: document.getElementById('carModel').value,
+        year: document.getElementById('carYear').value,
+        vin: document.getElementById('carVin').value,
+        license_plate: document.getElementById('carPlate').value
+    };
+    
+    try {
+        const response = await fetch('/api/user/cars', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(carData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Автомобиль добавлен', 'success');
+            document.getElementById('addCarForm').reset();
+            loadUserCars(); // Перезагружаем список
+        } else {
+            showNotification(data.message, 'danger');
+        }
+    } catch (error) {
+        showNotification('Ошибка при добавлении', 'danger');
+    }
+});
+
+// Смена аватара
+function changeAvatar() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Здесь можно добавить загрузку на сервер
+            showNotification('Функция загрузки фото будет добавлена позже', 'info');
+        }
+    };
+    
+    input.click();
+}
+
+// Выход из системы
+async function logout() {
+    try {
+        const response = await fetch('/api/user/logout', {
+            method: 'POST'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentUser = null;
+            showNotification('Вы вышли из системы', 'success');
+            
+            // Закрываем модальное окно
+            const modal = bootstrap.Modal.getInstance(document.getElementById('profileModal'));
+            if (modal) modal.hide();
+            
+            // Обновляем UI
+            loadAppointments();
+        }
+    } catch (error) {
+        showNotification('Ошибка при выходе', 'danger');
+    }
+}
+
+// ==================== ЧАТ ПОДДЕРЖКИ ====================
+
+let chatInitialized = false;
+let unreadCount = 0;
+let checkInterval = null;
+
+// Переключение чата
+function toggleChat() {
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.classList.toggle('active');
+    
+    if (chatWindow.classList.contains('active')) {
+        // Если чат открывается, загружаем историю и убираем бейдж
+        loadChatHistory();
+        chatInitialized = true;
+        hideChatNotification();
+        removeUnreadBadge(); // Убираем бейдж сразу
+    }
+}
+
+// Загрузка истории чата
+async function loadChatHistory() {
+    try {
+        const response = await fetch('/api/chat/history');
+        const data = await response.json();
+        
+        if (data.success) {
+            renderChatMessages(data.messages);
+            // После загрузки истории проверяем, нет ли непрочитанных
+            setTimeout(checkUnreadMessages, 1000);
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки истории чата:', error);
+    }
+}
+
+// Отображение сообщений
+function renderChatMessages(messages) {
+    const chatMessages = document.getElementById('chatMessages');
+    
+    // Очищаем чат
+    chatMessages.innerHTML = '';
+    
+    // Добавляем системное сообщение
+    const systemMsg = document.createElement('div');
+    systemMsg.className = 'message message-system';
+    systemMsg.innerHTML = '<small>Чат поддержки работает круглосуточно</small>';
+    chatMessages.appendChild(systemMsg);
+    
+    // Добавляем все сообщения из истории
+    if (messages && messages.length > 0) {
+        messages.forEach(msg => {
+            addMessageToChat(msg.message, msg.is_support ? 'support' : 'user', false);
+        });
+    } else {
+        // Если нет истории, добавляем приветственное сообщение
+        const welcomeMsg = document.createElement('div');
+        welcomeMsg.className = 'message message-support';
+        welcomeMsg.innerHTML = `
+            <div class="message-content">Здравствуйте! Чем я могу вам помочь?</div>
+            <div class="message-time">${new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'})}</div>
+        `;
+        chatMessages.appendChild(welcomeMsg);
+    }
+    
+    // Прокручиваем вниз
+    scrollChatToBottom();
+}
+
+// Отправка сообщения
+async function sendMessage(event) {
+    event.preventDefault();
+    
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Добавляем сообщение пользователя в чат
+    addMessageToChat(message, 'user', true);
+    
+    // Очищаем поле ввода
+    input.value = '';
+    
+    // Отправляем на сервер
+    try {
+        const response = await fetch('/api/chat/messages', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: message})
+        });
+        
+        const data = await response.json();
+        
+        if (data.auto_response) {
+            // Добавляем ответ через небольшую задержку
+            setTimeout(() => {
+                addMessageToChat(data.auto_response, 'support', true);
+            }, 1000);
+        }
+    } catch (error) {
+        console.error('Ошибка отправки сообщения:', error);
+        setTimeout(() => {
+            addMessageToChat('Извините, произошла ошибка. Пожалуйста, попробуйте позже.', 'support', true);
+        }, 500);
+    }
+}
+
+// Добавление сообщения в чат
+function addMessageToChat(text, type, save = true) {
+    const chatMessages = document.getElementById('chatMessages');
+    const time = new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message message-${type}`;
+    messageDiv.innerHTML = `
+        <div class="message-content">${text}</div>
+        <div class="message-time">${time}</div>
+    `;
+    
+    chatMessages.appendChild(messageDiv);
+    scrollChatToBottom();
+    
+    // Если это сообщение от поддержки и чат закрыт, показываем уведомление
+    if (type === 'support' && !document.getElementById('chatWindow').classList.contains('active')) {
+        showChatNotification(text);
+        // Обновляем счетчик непрочитанных
+        setTimeout(checkUnreadMessages, 500);
+    }
+}
+
+// Отправка быстрого вопроса
+function sendQuickQuestion(question) {
+    const input = document.getElementById('chatInput');
+    input.value = question;
+    sendMessage(new Event('submit'));
+}
+
+// Прокрутка чата вниз
+function scrollChatToBottom() {
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Показать уведомление о новом сообщении
+function showChatNotification(message) {
+    // Удаляем старое уведомление если есть
+    const oldNotification = document.getElementById('chatNotification');
+    if (oldNotification) {
+        oldNotification.remove();
+    }
+    
+    const notification = document.createElement('div');
+    notification.id = 'chatNotification';
+    notification.className = 'chat-notification show';
+    notification.innerHTML = `
+        <div class="chat-notification-avatar">
+            <i class="fas fa-headset"></i>
+        </div>
+        <div class="chat-notification-content">
+            <p>Поддержка</p>
+            <small>${message.substring(0, 30)}${message.length > 30 ? '...' : ''}</small>
+        </div>
+        <div class="chat-notification-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Автоматически скрыть через 5 секунд
+    setTimeout(() => {
+        const notif = document.getElementById('chatNotification');
+        if (notif) {
+            notif.classList.remove('show');
+            setTimeout(() => notif.remove(), 300);
+        }
+    }, 5000);
+}
+
+// Убрать бейдж непрочитанных
+function removeUnreadBadge() {
+    const badge = document.querySelector('.chat-button .unread-badge');
+    if (badge) {
+        badge.remove();
+    }
+    unreadCount = 0;
+}
+
+// Проверка непрочитанных сообщений
+async function checkUnreadMessages() {
+    // Если чат открыт, не показываем уведомления
+    if (document.getElementById('chatWindow').classList.contains('active')) {
+        removeUnreadBadge();
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/chat/unread');
+        const data = await response.json();
+        
+        if (data.success && data.count > 0) {
+            unreadCount = data.count;
+            // Обновляем счетчик на кнопке чата
+            const chatButton = document.querySelector('.chat-button');
+            let badge = chatButton.querySelector('.unread-badge');
+            
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'unread-badge';
+                chatButton.appendChild(badge);
+            }
+            badge.textContent = data.count;
+        } else {
+            // Убираем бейдж если нет непрочитанных
+            removeUnreadBadge();
+        }
+    } catch (error) {
+        console.error('Ошибка проверки сообщений:', error);
+    }
+}
+
+// Добавляем обработчик для закрытия чата по клику вне его
+document.addEventListener('click', function(event) {
+    const chatWindow = document.getElementById('chatWindow');
+    const chatButton = document.querySelector('.chat-button');
+    
+    if (chatWindow && chatWindow.classList.contains('active') && 
+        !chatWindow.contains(event.target) && 
+        !chatButton.contains(event.target)) {
+        chatWindow.classList.remove('active');
+    }
+});
+
+// Очищаем интервал при уходе со страницы
+window.addEventListener('beforeunload', function() {
+    if (checkInterval) {
+        clearInterval(checkInterval);
+    }
+});
+
+// Запускаем проверку каждые 10 секунд
+checkInterval = setInterval(checkUnreadMessages, 10000);
+
+// Первая проверка через 2 секунды после загрузки
+setTimeout(checkUnreadMessages, 2000);
+
+    // ==================== ГЛОБАЛЬНЫЕ ФУНКЦИИ ====================
+
+    window.addToCart = addToCart;
+    window.updateQuantity = updateQuantity;
+    window.removeFromCart = removeFromCart;
+    window.checkout = checkout;
+    window.goToCatalogFromCart = goToCatalogFromCart;
+    window.showOrdersModal = showOrdersModal;
+    window.closeOrdersModal = closeOrdersModal;
+    window.showLoginModal = showLoginModal;
+    window.resetFilters = resetFilters;
+    window.changePage = changePage;
+    window.cancelAppointment = cancelAppointment;
+    window.showProfile = showProfile;
+    window.deleteCar = deleteCar;
+    window.changeAvatar = changeAvatar;
+    window.logout = logout;
+    window.toggleChat = toggleChat;
+    window.sendMessage = sendMessage;
+    window.sendQuickQuestion = sendQuickQuestion;
+    window.hideChatNotification = hideChatNotification;
+</script>
+
+</body>
+</html>
